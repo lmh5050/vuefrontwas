@@ -1,32 +1,19 @@
 <template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
+  <div class="login-container">
+    <form @submit.prevent="handleLogin">
+      <div class="input-group">
+        <label for="username">아이디</label>
+        <input type="text" id="username" v-model="username" placeholder="아이디를 입력하세요" required />
+      </div>
+      <div class="input-group">
+        <label for="password">비밀번호</label>
+        <input type="password" id="password" v-model="password" placeholder="비밀번호를 입력하세요" required />
+      </div>
+      <button type="submit" class="login-button">로그인</button>
+    </form>
+    <div class="signup-link">
+      <button @click="goToSignUp" class="signup-button">회원가입</button>
+    </div>
   </div>
 </template>
 
@@ -35,24 +22,69 @@ export default {
   name: 'HelloWorld',
   props: {
     msg: String
+  },
+  data() {
+    return {
+      username: '',
+      password: ''
+    };
+  },
+  methods: {
+    handleLogin() {
+      // 로그인 처리 로직 추가
+      console.log('로그인 시도', this.username, this.password);
+    },
+    goToSignUp() {
+      // 회원가입 페이지로 이동하는 로직 추가
+      console.log('회원가입 페이지로 이동');
+    }
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.login-container {
+  width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.input-group {
+  margin-bottom: 15px;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
 }
-a {
+
+.input-group input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+button {
+  padding: 10px 20px;
+  cursor: pointer;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+}
+
+.login-button {
+  background-color: #42b983;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.signup-button {
+  background-color: #f0f0f0;
   color: #42b983;
+}
+
+.signup-link {
+  margin-top: 10px;
 }
 </style>

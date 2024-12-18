@@ -1,7 +1,12 @@
 import { createApp } from 'vue';
 import App from './App.vue';
-import router from './router';  // router를 import
+import router from './router';
+import axios from 'axios';
 
-createApp(App).use(router)
-  .use(router)   // Vue 애플리케이션에 router를 추가
-  .mount('#app');  // #app 요소에 마운트
+const app = createApp(App);
+axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+axios.defaults.headers.get['Content-Type'] = 'application/json;charset=utf-8';
+
+app.use(router); // 플러그인 등록은 한 번만
+app.config.globalProperties.axios = axios;
+app.mount('#app');
