@@ -18,79 +18,32 @@
         </thead>
         <tbody>
           <tr v-for="(RaidInfo, index) in Raid" :key="index">
-            <td @click="editField(index, 'raidName')">
-              <template v-if="editingField.index === index && editingField.field === 'raidName'">
-                <input v-model="RaidInfo.raidName" />
-              </template>
-              <template v-else>
-                {{ RaidInfo.raidName }}
-              </template>
-            </td>
-            <td @click="editField(index, 'gold1')">
-              <template v-if="editingField.index === index && editingField.field === 'gold1'">
-                <input v-model="RaidInfo.gold1" type="number" />
-              </template>
-              <template v-else>
-                {{ RaidInfo.gold1 }}
-              </template>
-            </td>
-            <td @click="editField(index, 'gold2')">
-              <template v-if="editingField.index === index && editingField.field === 'gold2'">
-                <input v-model="RaidInfo.gold2" type="number" />
-              </template>
-              <template v-else>
-                {{ RaidInfo.gold2 }}
-              </template>
-            </td>
-            <td @click="editField(index, 'gold3')">
-              <template v-if="editingField.index === index && editingField.field === 'gold3'">
-                <input v-model="RaidInfo.gold3" type="number" />
-              </template>
-              <template v-else>
-                {{ RaidInfo.gold3 }}
-              </template>
-            </td>
+            <td>{{ RaidInfo.raidName }}</td>
+            <td>{{ RaidInfo.gold1 }}</td>
+            <td>{{ RaidInfo.gold2 }}</td>
+            <td>{{ RaidInfo.gold3 }}</td>
             <td class="gold-sum">
               {{ (getValidNumber(RaidInfo.gold1) + getValidNumber(RaidInfo.gold2) + getValidNumber(RaidInfo.gold3)).toLocaleString() }}
             </td>
-            <td @click="editField(index, 'reward1')">
-                <template v-if="editingField.index === index && editingField.field === 'reward1'">
-                    <input v-model="RaidInfo.reward1" />
-                </template>
-                <template v-else>
-                    {{ RaidInfo.reward1 }}
-                </template>
+            <td>{{ RaidInfo.reward1 }}</td>
+            <td>
+              {{ RaidInfo.plus1 }} / ({{ RaidInfo.plus1 }}) = 
+              {{ (getValidNumber(RaidInfo.plus1) + getValidNumber(RaidInfo.plus1)).toLocaleString() }}
+            </td>
+            <td>
+              {{ RaidInfo.plus2 }} / ({{ RaidInfo.plus2 }}) = 
+              {{ (getValidNumber(RaidInfo.plus2) + getValidNumber(RaidInfo.plus2)).toLocaleString() }}
+            </td>
+            <td v-if="RaidInfo.plus3">
+                {{ RaidInfo.plus3 }} / ({{ RaidInfo.plus3 }}) = 
+                {{ (getValidNumber(RaidInfo.plus3) + getValidNumber(RaidInfo.plus3)).toLocaleString() }}
                 </td>
-            <td @click="editField(index, 'plus1')">
-              <template v-if="editingField.index === index && editingField.field === 'plus1'">
-                <input v-model="RaidInfo.plus1" />
-              </template>
-              <template v-else>
-                {{ RaidInfo.plus1 }} / ({{ RaidInfo.plus1 }})  = {{ (getValidNumber(RaidInfo.plus1) + getValidNumber(RaidInfo.plus1)).toLocaleString() }}
-              </template>
+                <td v-else>
+                <!-- 빈 셀 -->
             </td>
-            <td @click="editField(index, 'plus2')">
-              <template v-if="editingField.index === index && editingField.field === 'plus2'">
-                <input v-model="RaidInfo.plus2" />
-              </template>
-              <template v-else>
-                {{ RaidInfo.plus2 }} / ({{ RaidInfo.plus2 }})  = {{ (getValidNumber(RaidInfo.plus2) + getValidNumber(RaidInfo.plus2)).toLocaleString() }}
-              </template>
+            <td>
+              <button @click="deleteRaid(RaidInfo.raidName)">삭제</button>
             </td>
-            <td @click="editField(index, 'plus3')">
-                <template v-if="RaidInfo.plus3">
-                    <template v-if="editingField.index === index && editingField.field === 'plus3'">
-                    <input v-model="RaidInfo.plus3" />
-                    </template>
-                    <template v-else>
-                    {{ RaidInfo.plus3 }} / ({{ RaidInfo.plus3 }}) = {{ (getValidNumber(RaidInfo.plus3) + getValidNumber(RaidInfo.plus3)).toLocaleString() }}
-                    </template>
-                </template>
-                <template v-else>
-                    <span></span> <!-- 값이 없으면 빈 td로 처리 -->
-                </template>
-            </td>
-            <td><button @click="deleteRaid(RaidInfo.raidName)">삭제</button></td>
           </tr>
         </tbody>
       </table>
@@ -98,7 +51,7 @@
   </template>
   
   <script>
-  import '../../css/components/RaidMainChart.css'; // 스타일 파일을 import
+  import '../../css/components/RaidMainChart.css';
   import axios from 'axios';
   
   export default {
@@ -106,14 +59,13 @@
     data() {
       return {
         Raid: [], // 데이터를 저장할 배열
-        editingField: { index: null, field: null }, // 어떤 셀이 편집 중인지 추적
       };
     },
     mounted() {
       // 컴포넌트가 마운트되면 Spring API에서 데이터를 불러옴
       axios.get('http://localhost:8080/api/lostark/characters/raid')
         .then(response => {
-          console.log(response.data);  // 받아온 데이터를 콘솔로 확인
+          console.log(response.data);
           this.Raid = response.data;
         })
         .catch(error => {
@@ -121,21 +73,24 @@
         });
     },
     methods: {
-      // 숫자 값이 없으면 0을 반환하는 메소드
       getValidNumber(value) {
         return isNaN(parseFloat(value)) || value === null || value === '' ? 0 : parseFloat(value);
       },
-      // 셀 클릭 시 입력 필드로 전환
-      editField(index, field) {
-        this.editingField = { index, field };
-      },
-        // 삭제 버튼 클릭 시 실행될 메소드
-        deleteRaid(raidName) {
+      deleteRaid(raidName) {
         console.log(`${raidName} 레이드를 삭제합니다.`);
-            // 여기에 삭제 로직을 추가합니다 (예: 삭제 확인 후 API 호출 등)
+        axios
+            .delete(`http://localhost:8080/api/lostark/characters/${raidName}`)
+            .then(response => {
+            console.log(response.data); // API 응답 데이터를 콘솔에 출력
+            // 성공 시 처리 로직 추가 (예: UI에서 해당 항목 제거)
+            this.Raid = this.Raid.filter(raid => raid.raidName !== raidName);
+            })
+            .catch(error => {
+            console.error('There was an error!', error); // 에러 처리
+            });
         }
     }
-  }
+  };
   </script>
   
   <style scoped>
@@ -158,7 +113,7 @@
   }
   
   .gold-sum {
-    background-color: #ffeb99; /* 연노랑 배경색 */
+    background-color: #ffeb99;
   }
   
   button {
@@ -172,12 +127,6 @@
   
   button:hover {
     background-color: #369b71;
-  }
-  
-  input {
-    width: 80%;
-    padding: 5px;
-    margin: 5px;
   }
   </style>
   
