@@ -6,9 +6,10 @@ module.exports = defineConfig({
   devServer: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8080', // Spring Boot 서버 주소
+        target: process.env.VUE_APP_API_URL, // Spring Boot 서버 주소
         changeOrigin: true, // CORS 헤더 변경 허용
-        pathRewrite: { '^/api': '' } // '/api' 제거
+        pathRewrite: { '^/api': '' }, // '/api' 제거
+        port: 80
       }
     }
   }
