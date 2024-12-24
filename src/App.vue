@@ -2,7 +2,7 @@
   <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/raid">RaidClearInfo</router-link> |
-    <router-link to="/raid">RaidMatch</router-link>
+    <router-link to="/raidMatch">RaidMatch</router-link>
   </nav>
   <router-view/>
 </template>

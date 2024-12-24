@@ -77,18 +77,22 @@
         return isNaN(parseFloat(value)) || value === null || value === '' ? 0 : parseFloat(value);
       },
       deleteRaid(raidName) {
-        console.log(`${raidName} 레이드를 삭제합니다.`);
-        axios
-            .delete(`http://localhost:8080/api/lostark/characters/${raidName}`)
-            .then(response => {
-            console.log(response.data); // API 응답 데이터를 콘솔에 출력
+    console.log(`${raidName} 레이드를 삭제합니다.`);
+    axios
+        .delete(`http://localhost:8080/api/lostark/characters/raid/${encodeURIComponent(raidName)}`, {
+            data: {
+                data: raidName  // 본문에 raidName을 data로 포함
+            }
+        })
+        .then(response => {
+            console.log(response.data);  // API 응답 데이터를 콘솔에 출력
             // 성공 시 처리 로직 추가 (예: UI에서 해당 항목 제거)
             this.Raid = this.Raid.filter(raid => raid.raidName !== raidName);
-            })
-            .catch(error => {
-            console.error('There was an error!', error); // 에러 처리
-            });
-        }
+        })
+        .catch(error => {
+            console.error('There was an error!', error);  // 에러 처리
+        });
+      }
     }
   };
   </script>

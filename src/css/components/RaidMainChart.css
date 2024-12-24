@@ -1,21 +1,41 @@
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  table, th, td {
-    border: 1px solid black;
-  }
-  
-  th, td {
-    padding: 8px;
-    text-align: center; /* th를 가운데 정렬 */
-  }
-  
-  th {
-    background-color: #f2f2f2;
-  }
-  
-  .gold-sum {
-    background-color: #ffeb99; /* 연노랑 배경색 */
-  }
+.raid-main-chart {
+  padding-left: 12%;
+  padding-right: 12%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+
+th, td {
+  padding: 8px;
+  text-align: center;
+  font-size: 14px; /* 기본 글자 크기에서 1px 줄임 */
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+.gold-sum {
+  background-color: #ffeb99;
+}
+
+button {
+  padding: 5px 10px;
+  background-color: #42b983;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px; /* 버튼 글자 크기도 줄여줌 */
+}
+
+button:hover {
+  background-color: #369b71;
+}
