@@ -24,7 +24,7 @@ export default {
   methods: {
     handleClick() {
       // 버튼 클릭 시 입력된 데이터를 Spring Boot API로 POST 요청
-      axios.post(`http://localhost:8080/api/lostark/characters/${this.characterName}`, { data: this.inputData })
+      axios.post(`http://34.47.90.90:8081/api/lostark/characters/${this.characterName}`, { data: this.inputData })
         .then(response => {
           console.log(response.data);  // API 응답 데이터를 콘솔에 출력
         })
