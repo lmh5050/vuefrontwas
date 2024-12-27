@@ -26,15 +26,16 @@ th {
   background-color: #ffeb99;
 }
 
-button {
+td button {
   padding: 5px 10px;
   background-color: #42b983;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px; /* 버튼 글자 크기도 줄여줌 */
+  font-size: 14px;
 }
+
 
 button:hover {
   background-color: #369b71;

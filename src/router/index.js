@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import MyTest from '../views/MyTest.vue'
 import RaidView from '../views/RaidView.vue'
+import RaidMatchView from '../views/RaidMatchView.vue'
 
 
 const routes = [
@@ -19,6 +20,11 @@ const routes = [
     path: '/raid',
     name: 'raid',
     component: RaidView
+  },
+  {
+    path: '/raidMatch',
+    name: 'raidMatch',
+    component: RaidMatchView
   }
 ]
 
