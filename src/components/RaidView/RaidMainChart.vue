@@ -53,8 +53,6 @@
       <button @click="addRaid" style="width: 7%;">등록</button>
     </div>
 
-
-
     <!-- 모달 컴포넌트 -->
     <RaidModal v-if="isModalVisible" @close="closeModal"/>
   </div>

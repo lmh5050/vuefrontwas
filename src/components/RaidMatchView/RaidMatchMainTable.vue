@@ -1,17 +1,18 @@
 <template>
     <div class="raid-modal">
       <h2>레이드를 추가</h2>
-      <div v-if="loading">로딩 중...</div> <!-- 로딩 상태 표시 -->
-      <div v-else-if="error">{{ error }}</div> <!-- 오류 메시지 표시 -->
+      <div v-if="loading">로딩 중...</div>
+      <div v-else-if="error">{{ error }}</div>
       <div v-else>
         <table class="raid-table">
           <thead>
             <tr>
-              <th></th> <!-- 체크박스 열 -->
+              <th></th>
               <th>레이드 명</th>
               <th>대표 캐릭터</th>
               <th>시간</th>
               <th>메모</th>
+              <th>레이드 신청</th>
             </tr>
           </thead>
           <tbody>
@@ -20,65 +21,97 @@
                 <input type="checkbox" :value="raid.no" />
               </td>
               <td>{{ raid.raidName }}</td>
-              <td>{{ raid.characterNameRepresent }}</td>
+              <td>{{ raid.characterName }}</td>
               <td>{{ raid.time }}</td>
               <td>{{ raid.text }}</td>
+              <td>
+                <button class="apply-button" @click="registerRaid(raid.no)">신청</button>
+              </td>
             </tr>
           </tbody>
         </table>
+        <div class="table-footer">
+          <button class="register-button" @click="openRaidModal">등록</button>
+        </div>
+      </div>
+  
+      <!-- 모달 -->
+      <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+        <div class="modal-content">
+          <RaidMatchModal @close="closeModal" />
+        </div>
       </div>
     </div>
   </template>
   
   <script>
-  import axios from 'axios';
-  import '../../css/components/RaidView/RaidModal.css';
+  import axios from "axios";
+  import RaidMatchModal from "./RaidMatchModal.vue";
   
   export default {
-    name: 'RaidModal',
+    name: "RaidModal",
+    components: {
+        RaidMatchModal,
+    },
     data() {
       return {
-        raidList: [], // API로부터 가져온 데이터 저장
-        loading: true, // 로딩 상태 관리
-        error: null, // 오류 메시지 저장
+        raidList: [],
+        loading: true,
+        error: null,
+        selectedRaids: [],
+        showModal: false, // 모달 표시 상태 관리
       };
     },
     methods: {
       fetchRaidData() {
-        // 데이터 불러오는 API 호출
         axios
-          .get('http://localhost:8080/api/lostark/characters/raidMatch')
+          .get("http://localhost:8080/api/lostark/characters/raidMatch")
           .then((response) => {
-            this.raidList = response.data; // 데이터 저장
-            this.loading = false; // 로딩 종료
+            this.raidList = response.data;
+            this.loading = false;
           })
           .catch((error) => {
-            console.error('Error fetching raid data:', error);
-            this.error = '데이터를 불러오는 데 실패했습니다.';
-            this.loading = false; // 로딩 종료
+            console.error("Error fetching raid data:", error);
+            this.error = "데이터를 불러오는 데 실패했습니다.";
+            this.loading = false;
           });
+      },
+      registerRaid(raidNo) {
+        axios
+          .post("http://localhost:8080/api/lostark/characters/registerRaid", {
+            raidNo,
+          })
+          .then(() => alert("신청이 완료되었습니다."))
+          .catch(() => alert("신청에 실패했습니다."));
+      },
+      openRaidModal() {
+        this.showModal = true; // 모달을 표시하도록 설정
+      },
+      closeModal() {
+        this.showModal = false; // 모달을 숨기도록 설정
       },
     },
     mounted() {
-      // 컴포넌트가 로드될 때 데이터 가져오기
       this.fetchRaidData();
     },
   };
   </script>
   
   <style scoped>
+  /* 기존 스타일 유지 */
   .raid-modal {
     text-align: center;
     padding: 20px;
   }
   
   .raid-table {
-    margin: 0 auto; /* 테이블을 중앙에 배치 */
+    margin: 0 auto;
     border-collapse: collapse;
     width: 80%;
   }
   
-  .raid-table th, .raid-table td {
+  .raid-table th,
+  .raid-table td {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
@@ -93,8 +126,62 @@
     background-color: #f9f9f9;
   }
   
-  input[type="checkbox"] {
+  .table-footer {
+    margin-top: 3%;
+    text-align: center;
+    padding-top: 20px;
+  }
+  
+  .apply-button {
+    padding: 5px 10px;
+    background-color: #42b983;
+    color: white;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
+  }
+  
+  .apply-button:hover {
+    background-color: #3a9b75;
+  }
+  
+  .register-button {
+    padding: 5px 10px;
+    width: auto;
+    max-width: 15%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .register-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* 모달 스타일 */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    width: 50%; /* 원하는 크기로 설정 */
+    max-height: 80%;
+    overflow-y: auto; /* 모달 내용 스크롤 가능 */
   }
   </style>
   
