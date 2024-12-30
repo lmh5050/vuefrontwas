@@ -5,6 +5,12 @@
       <input v-model="characterName" type="text" class="small-input" placeholder="입력해주세요" />
       <button class="register-button" @click="submitCharacterName">등록</button>
     </div>
+
+    <!-- 가져온 데이터를 아래에 표시 -->
+    <div v-if="characterData" class="character-data">
+      <h3>Character Data:</h3>
+      <pre>{{ characterData }}</pre> <!-- JSON 형태로 데이터 출력 -->
+    </div>
   </div>
 </template>
 
@@ -17,9 +23,33 @@ export default {
     return {
       characterName: '',  // input에서 값을 바인딩할 변수
       username: sessionStorage.getItem('username') || '', // 세션에서 username 가져오기
+      characterData: null,  // 가져온 데이터를 저장할 변수
     };
   },
+  mounted() {
+    // 페이지가 로드될 때, username을 사용하여 GET 요청을 보냄
+    if (this.username) {
+      this.fetchCharacterData();
+    }
+  },
   methods: {
+    async fetchCharacterData() {
+      try {
+        // GET 방식으로 데이터 요청
+        const response = await axios.get(`http://localhost:8080/api/lostark/characters/${this.username}`, {
+          params: {
+            username: this.username,  // 쿼리 파라미터로 username 전달
+          },
+        });
+
+        console.log('Fetched character data:', response.data);  // 응답 데이터 출력
+        this.characterData = response.data;  // 응답 데이터 저장
+      } catch (error) {
+        console.error('API 호출 실패:', error);
+        // 오류 처리 추가 (예: 오류 메시지 표시)
+      }
+    },
+
     async submitCharacterName() {
       try {
         // POST 방식으로 데이터 전송
@@ -28,8 +58,9 @@ export default {
           username: this.username,  // 세션에서 가져온 username 추가
         });
 
-        console.log('Character data:', response.data);  // 응답 데이터 출력 (여기서 필요한 데이터 사용)
-        // API 응답에 대한 처리를 추가하세요 (예: 결과 표시)
+        console.log('Character data:', response.data);  // 응답 데이터 출력
+        // POST 요청 후 가져온 데이터가 있다면 화면에 표시
+        this.characterData = response.data;  // 응답 데이터 저장
       } catch (error) {
         console.error('API 호출 실패:', error);
         // 오류 처리 추가 (예: 오류 메시지 표시)
@@ -77,5 +108,12 @@ export default {
 
 .register-button:hover {
   background-color: darkgreen;
+}
+
+.character-data {
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f5f5f5;
 }
 </style>
