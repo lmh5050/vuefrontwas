@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import MyTest from '../views/MyTest.vue'
 import RaidView from '../views/RaidView.vue'
 import RaidMatchView from '../views/RaidMatchView.vue'
+import signupView from '../views/signupView.vue'
+import MypageView from '../views/MypageView.vue'
 
 
 const routes = [
@@ -10,11 +11,6 @@ const routes = [
     path: '/',
     name: 'home',
     component: HomeView
-  },
-  {
-    path: '/test',
-    name: 'test',
-    component: MyTest
   },
   {
     path: '/raid',
@@ -25,6 +21,21 @@ const routes = [
     path: '/raidMatch',
     name: 'raidMatch',
     component: RaidMatchView
+  },
+  {
+    path: '/signup',
+    name: 'signup',
+    component: signupView
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: HomeView
+  },
+  {
+    path: '/mypage',
+    name: 'mypage',
+    component: MypageView
   }
 ]
 
