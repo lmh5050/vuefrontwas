@@ -5,12 +5,6 @@
       <input v-model="characterName" type="text" class="small-input" placeholder="입력해주세요" />
       <button class="register-button" @click="submitCharacterName">등록</button>
     </div>
-
-    <!-- 가져온 데이터를 아래에 표시 -->
-    <div v-if="characterData" class="character-data">
-      <h3>Character Data:</h3>
-      <pre>{{ characterData }}</pre> <!-- JSON 형태로 데이터 출력 -->
-    </div>
   </div>
 </template>
 

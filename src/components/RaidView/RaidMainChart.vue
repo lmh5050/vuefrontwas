@@ -76,7 +76,7 @@ export default {
   },
   mounted() {
     // 컴포넌트가 마운트되면 Spring API에서 데이터를 불러옴
-    axios.get('http://34.47.90.90:8081/api/lostark/characters/raid')
+    axios.get('http://localhost:8080/api/lostark/characters/raid')
       .then(response => {
         console.log(response.data);
         this.Raid = response.data;
@@ -92,7 +92,7 @@ export default {
     deleteRaid(raidName) {
       console.log(`${raidName} 레이드를 삭제합니다.`);
       axios
-          .delete(`http://34.47.90.90:8081/api/lostark/characters/raid/${encodeURIComponent(raidName)}`, {
+          .delete(`http://localhost:8080/api/lostark/characters/raid/${encodeURIComponent(raidName)}`, {
               data: {
                   data: raidName  // 본문에 raidName을 data로 포함
               }
