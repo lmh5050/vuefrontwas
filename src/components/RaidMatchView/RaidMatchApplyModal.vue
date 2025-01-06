@@ -1,91 +1,150 @@
 <template>
-    <div>
-      <h3>레이드 상세</h3>
-      <div v-if="selectedRaidInfo" style="padding-bottom: 2%;">
-        <span style="margin-right: 5px;">시간: <span style="font-weight: bold;">{{ selectedRaidInfo.time }}</span> |</span>
-        <span style="margin-right: 5px;">레이드 명: <span style="font-weight: bold;">{{ selectedRaidInfo.raidName }}</span> |</span>
-        <span style="margin-right: 5px;">공대장: <span style="font-weight: bold;">{{ selectedRaidInfo.characterName }}</span></span>
+  <div>
+    <!-- 드랍다운 박스 -->
+    <div class="custom-dropdown-wrapper">
+      <div class="custom-dropdown" @click="toggleDropdown">
+        <span>{{ selectedCharacterInfo.characterName || '캐릭터 선택' }}</span>
+        <span v-if="isOpen">▲</span>
+        <span v-else>▼</span>
       </div>
-      <div class="raid-details">
-        <div v-for="(raid, index) in raids" :key="index" class="raid-item">
-          <p>참여 캐릭터: {{ raid.characterName }}</p>
-          <p>아이템 최대 레벨: {{ raid.itemMaxLevel }}</p>
-          <p>클래스 이름: {{ raid.className }}</p>
-          <p>클래스 타입: {{ raid.classType }}</p>
-        </div>
-      </div>
-      <button @click="$emit('close')"> 닫기 </button>
+      <ul v-if="isOpen" class="custom-dropdown-list">
+        <li 
+          v-for="(character, index) in raidApplyCharacterInfo" 
+          :key="index" 
+          @click="selectCharacter(character)"
+          class="custom-dropdown-item"
+        >
+          {{ character.characterName }} - {{ character.itemMaxLevel }} - {{character.className}} - {{character.classType}}
+        </li>
+      </ul>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: "RaidMatchApplyModal",
-    props: {
-        selectedRaidInfo: Object, // 부모에서 받은 선택된 레이드 정보
-      raids: {
-        type: Array,
-        required: true,
-      },
+
+    <hr>
+
+    <!-- 선택된 캐릭터 정보 표시 -->
+    <div v-if="selectedCharacterInfo.characterName">
+      <p>선택된 캐릭터 정보:</p>
+      <p>캐릭터 이름: {{ selectedCharacterInfo.characterName }}</p>
+      <p>아이템 최대 레벨: {{ selectedCharacterInfo.itemMaxLevel }}</p>
+      <p>클래스 이름: {{ selectedCharacterInfo.className }}</p>
+      <p>클래스 타입: {{ selectedCharacterInfo.classType }}</p>
+    </div>
+
+    <!-- 신청 버튼 (선택된 캐릭터가 있을 때만 보이도록 조건 추가) -->
+    <div v-if="selectedCharacterInfo.characterName" class="apply-button-wrapper">
+      <button @click="applyForRaid" class="apply-button">신청</button>
+    </div>
+
+    <!-- 다른 Modal 내용들 -->
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    raidApplyCharacterInfo: {
+      type: Array,
+      required: true,
     },
-  };
-  </script>
-  
-  <style scoped>
-  .raid-details {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: space-around;
-  }
-  
-  .raid-item {
-    flex: 1 1 250px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  button {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #42b983;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button:hover {
-    background-color: #3a9b75;
-  }
-  
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.7); /* 더 진한 배경 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .modal-content {
-    background: white;
-    padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
-    width: 90vw; /* 90% of the viewport width */
-    height: 80vh; /* 80% of the viewport height */
-    max-width: 100%;
-    max-height: 100%;
-    overflow-y: auto;
-  }
-  </style>
-  
+  },
+  data() {
+    return {
+      isOpen: false,  // 드롭다운이 열렸는지 여부
+      selectedCharacterInfo: {},  // 선택된 캐릭터 정보
+    };
+  },
+  methods: {
+    toggleDropdown() {
+      this.isOpen = !this.isOpen;
+    },
+    selectCharacter(character) {
+      this.selectedCharacterInfo = character;  // 선택된 캐릭터 정보 저장
+      this.isOpen = false;  // 드롭다운 닫기
+    },
+    applyForRaid() {
+      // 신청 로직 구현
+      console.log("Raid 신청됨:", this.selectedCharacterInfo);
+    },
+  },
+};
+</script>
+
+<style scoped>
+.custom-dropdown-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.custom-dropdown {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.custom-dropdown:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.custom-dropdown-list {
+  position: absolute;
+  width: 100%;
+  max-height: 200px; /* 최대 높이 설정 */
+  overflow-y: auto;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  border-radius: 5px;
+  z-index: 10;
+  padding: 0;
+  list-style-type: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-dropdown-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.custom-dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
+.custom-dropdown-list li {
+  padding: 10px;
+}
+
+/* 신청 버튼 스타일 */
+.apply-button-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.apply-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.apply-button:hover {
+  background-color: #0056b3;
+}
+
+.apply-button:focus {
+  outline: none;
+}
+</style>

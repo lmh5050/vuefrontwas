@@ -12,15 +12,15 @@
           </select>
         </div>
 
-        <!-- 대표 캐릭터 -->
+        <!-- 대표 캐릭터 (드롭다운) -->
         <div class="form-group">
           <label for="characterName">캐릭터</label>
-          <input
-            type="text"
-            id="characterName"
-            v-model="formData.characterName"
-            required
-          />
+          <select v-model="formData.characterName" required class="character-select">
+            <option value="" disabled>캐릭터를 선택하세요</option>
+            <option v-for="character in raidApplyCharacterInfo" :key="character.id" :value="character.characterName">
+              {{ character.characterName }} - {{ character.itemMaxLevel }} - {{ character.className }} - {{ character.classType }}
+            </option>
+          </select>
         </div>
 
         <!-- 시간 (달력) -->
@@ -58,6 +58,7 @@ export default {
   data() {
     return {
       raidNames: [], // 레이드명을 담을 배열
+      raidApplyCharacterInfo: [], // 캐릭터 정보를 담을 배열
       formData: {
         raidName: "",
         characterName: "",
@@ -82,8 +83,23 @@ export default {
       const min = String(date.getMinutes()).padStart(2, "0");
       return `${yyyy}-${mm}-${dd}T${hh}:${min}`;
     },
-    // 레이드명 목록을 가져오는 함수
+    // 레이드명 및 캐릭터 목록을 가져오는 함수
     fetchRaidNames() {
+      const id = sessionStorage.getItem('username'); // 세션에서 username 가져오기
+      console.log("Username from session storage:", id);
+
+      // 캐릭터 정보 가져오기
+      axios
+        .get(`http://localhost:8080/api/lostark/characters/applyRaid/${id}`)
+        .then((response) => {
+          this.raidApplyCharacterInfo = response.data; // 서버에서 반환된 데이터 저장
+        })
+        .catch((error) => {
+          console.error("Error fetching character info:", error);
+          alert("캐릭터 정보를 불러오는 데 실패했습니다.");
+        });
+
+      // 레이드명 가져오기
       axios
         .get("http://localhost:8080/api/lostark/characters/raid")
         .then((response) => {
@@ -95,8 +111,17 @@ export default {
     },
     // 폼 제출 시 호출되는 함수
     submitForm() {
+      const username = sessionStorage.getItem('username'); // 세션에서 username 가져오기
+      console.log("Username from session storage:", username);
+
+      // formData에 username 추가
+      const formDataWithUsername = {
+        ...this.formData,
+        id: username, // username 추가
+      };
+
       axios
-        .post("http://localhost:8080/api/lostark/characters/raidMatch", this.formData)
+        .post("http://localhost:8080/api/lostark/characters/raidMatch", formDataWithUsername)
         .then((response) => {
           // 성공적으로 등록된 후 처리할 작업
           console.log("등록 성공:", response.data);
@@ -109,14 +134,14 @@ export default {
     },
   },
   mounted() {
-    this.fetchRaidNames(); // 컴포넌트가 마운트되면 레이드명 목록을 가져옵니다.
+    this.fetchRaidNames(); // 컴포넌트가 마운트되면 레이드명 및 캐릭터 목록을 가져옵니다.
   },
 };
 </script>
 
 <style scoped>
 /* 셀렉트 박스 크기 조정 */
-.raid-select {
+.raid-select, .character-select {
   width: 100%; /* 너비를 100%로 설정 */
   height: 40px; /* 높이를 40px로 설정 (적당한 높이로 조정) */
   font-size: 16px; /* 글자 크기를 조금 키움 */
