@@ -54,7 +54,7 @@
       <!-- 신청 모달 -->
       <div v-if="showApplyModal" class="modal-overlay" @click.self="closeApplyModal">
         <div class="modal-content">
-          <RaidMatchApplyModal :raidApplyCharacterInfo="raidApplyCharacterInfo" @close="closeApplyModal" />
+          <RaidMatchApplyModal :raidApplyCharacterInfo="raidApplyCharacterInfo" :raidNo="selectedRaidInfo.no" @close="closeApplyModal" />
         </div>
       </div>
     </div>
@@ -135,29 +135,24 @@
         this.showDetailModal = false;
       },
       openApplyModal(raid) {
-        const id = sessionStorage.getItem("username"); // 세션 스토리지에서 username 값을 가져옴
+        const id = sessionStorage.getItem("username");
         if (!id) {
-          alert("로그인이 필요합니다."); // username 값이 없을 경우 경고 메시지
+          alert("로그인이 필요합니다.");
           return;
         }
-        // 서버에 요청을 보냄 (PathVariable로 username 포함)
         axios
           .get(`http://localhost:8080/api/lostark/characters/applyRaid/${id}`, {
-            params: {
-              raidId: raid.no, // URL 쿼리 파라미터로 추가
-              raidName: raid.raidName, // 레이드 이름 등 추가적인 정보
-            },
+            params: { raidId: raid.no, raidName: raid.raidName },
           })
           .then((response) => {
-            // 서버에서 응답을 받으면, 응답 데이터를 selectedRaidInfo에 저장
-            this.raidApplyCharacterInfo = response.data; // 서버에서 반환된 데이터 저장
-
-            // 신청 모달 창 열기
+            this.raidApplyCharacterInfo = response.data;
+            this.selectedRaidInfo = raid; // 선택된 레이드 정보를 저장
             this.showApplyModal = true;
+            console.log(response);
           })
           .catch((error) => {
             console.error("Error applying for raid:", error);
-            alert("레이드 신청에 실패했습니다."); // 실패 메시지
+            alert("레이드 신청에 실패했습니다.");
           });
       },
       closeApplyModal() {

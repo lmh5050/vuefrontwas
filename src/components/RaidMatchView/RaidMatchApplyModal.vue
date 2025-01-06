@@ -40,30 +40,54 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   props: {
     raidApplyCharacterInfo: {
       type: Array,
       required: true,
     },
+    raidNo: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
-      isOpen: false,  // 드롭다운이 열렸는지 여부
-      selectedCharacterInfo: {},  // 선택된 캐릭터 정보
+      isOpen: false, // 드롭다운이 열렸는지 여부
+      selectedCharacterInfo: {}, // 선택된 캐릭터 정보
     };
   },
   methods: {
     toggleDropdown() {
-      this.isOpen = !this.isOpen;
+      this.isOpen = !this.isOpen; // 드롭다운 열기/닫기
     },
     selectCharacter(character) {
-      this.selectedCharacterInfo = character;  // 선택된 캐릭터 정보 저장
-      this.isOpen = false;  // 드롭다운 닫기
+      this.selectedCharacterInfo = character; // 선택된 캐릭터 정보 저장
+      this.isOpen = false; // 드롭다운 닫기
     },
     applyForRaid() {
-      // 신청 로직 구현
-      console.log("Raid 신청됨:", this.selectedCharacterInfo);
+      if (!this.selectedCharacterInfo.characterName) {
+        alert("캐릭터를 선택하세요."); // 캐릭터가 선택되지 않은 경우 경고 메시지
+        return;
+      }
+
+      // 서버로 신청 데이터 전송
+      axios
+        .post("http://localhost:8080/api/lostark/characters/raidMatchApply", {
+          raidNo: this.raidNo, // 전달받은 raidNo 사용
+          characterName: this.selectedCharacterInfo.characterName, // 선택된 캐릭터 이름
+        })
+        .then(() => {
+          alert("신청이 완료되었습니다."); // 성공 메시지
+          this.$emit("close"); // 부모 컴포넌트로 close 이벤트 전달
+        })
+        .catch(() => alert("신청에 실패했습니다.")); // 실패 메시지
+      console.log("Raid 신청됨:", {
+        raidNo: this.raidNo,
+        characterName: this.selectedCharacterInfo.characterName,
+      });
     },
   },
 };
