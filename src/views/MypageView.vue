@@ -1,30 +1,36 @@
 <template>
   <div class="raid">
-    <MypageMainView />  <!-- 'MypageMainView' 컴포넌트를 사용 -->
-    <MypageMainCharacter/>
+    <div class="view-wrapper">
+      <MypageMainView /> <!-- 첫 번째 컴포넌트 -->
+    </div>
   </div>
 </template>
 
 <script>
-import MypageMainView from '../components/MypageView/MypageMainView.vue'; // 'MypageMainView' 컴포넌트를 가져오기
-import MypageMainCharacter from '../components/MypageView/MypageMainCharacter.vue'; // 'MypageMainCharacter' 컴포넌트를 가져오기
+import MypageMainView from '../components/MypageView/MypageMainView.vue';
 
 export default {
-  name: 'MypageView',  // 컴포넌트 이름을 'MypageView'로 변경
+  name: 'MypageView',
   components: {
-    MypageMainView,  // 여기에서 'MypageMainView'만 등록
-    MypageMainCharacter
-  }
-}
+    MypageMainView,
+  },
+};
 </script>
 
 <style scoped>
 .raid {
   width: 100%;
-  height: 65vh;  /* 페이지의 크기 조정 (80%로 줄임) */
+  height: 100vh; /* 전체 높이를 뷰포트 높이로 설정 */
   padding: 20px;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  flex-direction: column; /* 세로 배치 */
+}
+
+.view-wrapper {
+  flex: 0 0 10%; /* 높이를 전체의 10%로 설정 */
+}
+
+.character-wrapper {
+  flex: 1; /* 나머지 공간을 차지 */
 }
 </style>

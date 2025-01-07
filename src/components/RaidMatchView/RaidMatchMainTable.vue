@@ -1,170 +1,178 @@
 <template>
-    <div class="raid-modal">
-      <h2>레이드 테이블</h2>
-      <div v-if="loading">로딩 중...</div>
-      <div v-else-if="error">{{ error }}</div>
-      <div v-else>
-        <table class="raid-table">
-          <thead>
-            <tr>
-              <th></th>
-              <th>시간</th>
-              <th>레이드 명</th>
-              <th>대표 캐릭터</th>
-              <th>메모</th>
-              <th>레이드 신청</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(raid, index) in raidList" :key="index">
-              <td>
-                <input type="checkbox" :value="raid.no" />
-              </td>
-              <td>{{ raid.time }}</td>
-              <td>
-                <a href="#" @click.prevent="openRaidDetailModal(raid)">{{ raid.raidName }}</a>
-              </td>
-              <td>{{ raid.characterName }}</td>
-              <td>{{ raid.text }}</td>
-              <td>
-                <button class="apply-button" @click="openApplyModal(raid)">신청</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="table-footer">
-          <button class="register-button" @click="openRaidModal">등록</button>
-        </div>
-      </div>
-  
-      <!-- 등록 모달 -->
-      <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
-        <div class="modal-content">
-          <RaidMatchModal @close="closeModal" />
-        </div>
-      </div>
-  
-      <!-- 상세 모달 -->
-      <div v-if="showDetailModal" class="modal-overlay" @click.self="closeDetailModal">
-        <div class="modal-content">
-          <RaidMatchDetailModal :raids="selectedRaids" :selectedRaidInfo="selectedRaidInfo" @close="closeDetailModal" />
-        </div>
-      </div>
-  
-      <!-- 신청 모달 -->
-      <div v-if="showApplyModal" class="modal-overlay" @click.self="closeApplyModal">
-        <div class="modal-content">
-          <RaidMatchApplyModal :raidApplyCharacterInfo="raidApplyCharacterInfo" :raidNo="selectedRaidInfo.no" @close="closeApplyModal" />
-        </div>
+  <div class="raid-modal">
+    <h2>레이드 테이블</h2>
+    <div v-if="loading">로딩 중...</div>
+    <div v-else-if="error">{{ error }}</div>
+    <div v-else>
+      <table class="raid-table">
+        <thead>
+          <tr>
+            <th></th>
+            <th>날짜</th>
+            <th>출발 시간</th>
+            <th>레이드 명</th>
+            <th>대표 캐릭터</th>
+            <th>메모</th>
+            <th>레이드 신청</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(raid, index) in raidList" :key="index">
+            <td>
+              <input type="checkbox" :value="raid.no" />
+            </td>
+            <td>{{ getRaidDate(raid.time) }}</td>
+            <td>{{ getRaidTime(raid.time) }}</td>
+            <td>
+              <a href="#" @click.prevent="openRaidDetailModal(raid)">{{ raid.raidName }}</a>
+            </td>
+            <td>{{ raid.characterName }}</td>
+            <td>{{ raid.text }}</td>
+            <td>
+              <button class="apply-button" @click="openApplyModal(raid)">신청</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="table-footer">
+        <button class="register-button" @click="openRaidModal">등록</button>
       </div>
     </div>
-  </template>
-  
-  <script>
-  import axios from "axios";
-  import RaidMatchModal from "./RaidMatchModal.vue";
-  import RaidMatchDetailModal from "./RaidMatchDetailModal.vue";
-  import RaidMatchApplyModal from "./RaidMatchApplyModal.vue";
-  
-  export default {
-    name: "RaidModal",
-    components: {
-      RaidMatchModal,
-      RaidMatchDetailModal,
-      RaidMatchApplyModal,
+
+    <!-- 등록 모달 -->
+    <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
+      <div class="modal-content">
+        <RaidMatchModal @close="closeModal" />
+      </div>
+    </div>
+
+    <!-- 상세 모달 -->
+    <div v-if="showDetailModal" class="modal-overlay" @click.self="closeDetailModal">
+      <div class="modal-content">
+        <RaidMatchDetailModal :raids="selectedRaids" :selectedRaidInfo="selectedRaidInfo" @close="closeDetailModal" />
+      </div>
+    </div>
+
+    <!-- 신청 모달 -->
+    <div v-if="showApplyModal" class="modal-overlay" @click.self="closeApplyModal">
+      <div class="modal-content">
+        <RaidMatchApplyModal :raidApplyCharacterInfo="raidApplyCharacterInfo" :raidNo="selectedRaidInfo.no" @close="closeApplyModal" />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+import RaidMatchModal from "./RaidMatchModal.vue";
+import RaidMatchDetailModal from "./RaidMatchDetailModal.vue";
+import RaidMatchApplyModal from "./RaidMatchApplyModal.vue";
+
+export default {
+  name: "RaidModal",
+  components: {
+    RaidMatchModal,
+    RaidMatchDetailModal,
+    RaidMatchApplyModal,
+  },
+  data() {
+    return {
+      raidList: [],
+      loading: true,
+      error: null,
+      selectedRaids: [],
+      showModal: false,
+      showDetailModal: false,
+      showApplyModal: false, // 신청 모달 상태
+      selectedRaidInfo: null, // 신청 모달에 전달할 데이터
+    };
+  },
+  methods: {
+    fetchRaidData() {
+      axios
+        .get("http://localhost:8080/api/lostark/characters/raidMatch")
+        .then((response) => {
+          this.raidList = response.data;
+          this.loading = false;
+        })
+        .catch((error) => {
+          console.error("Error fetching raid data:", error);
+          this.error = "데이터를 불러오는 데 실패했습니다.";
+          this.loading = false;
+        });
     },
-    data() {
-      return {
-        raidList: [],
-        loading: true,
-        error: null,
-        selectedRaids: [],
-        showModal: false,
-        showDetailModal: false,
-        showApplyModal: false, // 신청 모달 상태
-        selectedRaidInfo: null, // 신청 모달에 전달할 데이터
-      };
+    getRaidDate(time) {
+    const date = new Date(time);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 +1
+    const day = String(date.getDate()).padStart(2, "0");
+    const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
+    const dayOfWeek = daysOfWeek[date.getDay()]; // 요일 계산
+    return `${year}-${month}-${day} (${dayOfWeek})`; // 날짜와 요일 반환
     },
-    methods: {
-      fetchRaidData() {
-        axios
-          .get("http://localhost:8080/api/lostark/characters/raidMatch")
-          .then((response) => {
-            this.raidList = response.data;
-            this.loading = false;
-          })
-          .catch((error) => {
-            console.error("Error fetching raid data:", error);
-            this.error = "데이터를 불러오는 데 실패했습니다.";
-            this.loading = false;
-          });
-      },
-      registerRaid(raidNo) {
-        axios
-          .post("http://localhost:8080/api/lostark/characters/registerRaid", {
-            raidNo,
-          })
-          .then(() => alert("신청이 완료되었습니다."))
-          .catch(() => alert("신청에 실패했습니다."));
-      },
-      openRaidModal() {
-        this.showModal = true;
-      },
-      closeModal() {
-        this.showModal = false;
-      },
-      openRaidDetailModal(raid) {
-        this.loading = true;
-        axios
-          .get(`http://localhost:8080/api/lostark/characters/raidDetail/${raid.no}`)
-          .then((response) => {
-            this.selectedRaids = response.data;
-            this.selectedRaidInfo = raid;
-            this.showDetailModal = true;
-          })
-          .catch((error) => {
-            console.error("Error fetching raid details:", error);
-            alert("레이드 상세 정보를 불러오는 데 실패했습니다.");
-          })
-          .finally(() => {
-            this.loading = false;
-          });
-      },
-      closeDetailModal() {
-        this.selectedRaids = [];
-        this.showDetailModal = false;
-      },
-      openApplyModal(raid) {
-        const id = sessionStorage.getItem("username");
-        if (!id) {
-          alert("로그인이 필요합니다.");
-          return;
-        }
-        axios
-          .get(`http://localhost:8080/api/lostark/characters/applyRaid/${id}`, {
-            params: { raidId: raid.no, raidName: raid.raidName },
-          })
-          .then((response) => {
-            this.raidApplyCharacterInfo = response.data;
-            this.selectedRaidInfo = raid; // 선택된 레이드 정보를 저장
-            this.showApplyModal = true;
-            console.log(response);
-          })
-          .catch((error) => {
-            console.error("Error applying for raid:", error);
-            alert("레이드 신청에 실패했습니다.");
-          });
-      },
-      closeApplyModal() {
-        this.selectedRaidInfo = null; // 데이터 초기화
-        this.showApplyModal = false; // 신청 모달 숨기기
-      },
+    getRaidTime(time) {
+      return time.split("T")[1]; // 시간 부분만 반환
     },
-    mounted() {
-      this.fetchRaidData();
+    openRaidModal() {
+      this.showModal = true;
     },
-  };
-  </script>
+    closeModal() {
+      this.showModal = false;
+    },
+    openRaidDetailModal(raid) {
+      this.loading = true;
+      axios
+        .get(`http://localhost:8080/api/lostark/characters/raidDetail/${raid.no}`)
+        .then((response) => {
+          this.selectedRaids = response.data;
+          this.selectedRaidInfo = raid;
+          this.showDetailModal = true;
+        })
+        .catch((error) => {
+          console.error("Error fetching raid details:", error);
+          alert("레이드 상세 정보를 불러오는 데 실패했습니다.");
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+    closeDetailModal() {
+      this.selectedRaids = [];
+      this.showDetailModal = false;
+    },
+    openApplyModal(raid) {
+      const id = sessionStorage.getItem("username");
+      if (!id) {
+        alert("로그인이 필요합니다.");
+        return;
+      }
+      axios
+        .get(`http://localhost:8080/api/lostark/characters/applyRaid/${id}`, {
+          params: { raidId: raid.no, raidName: raid.raidName },
+        })
+        .then((response) => {
+          this.raidApplyCharacterInfo = response.data;
+          this.selectedRaidInfo = raid; // 선택된 레이드 정보를 저장
+          this.showApplyModal = true;
+          console.log(response);
+        })
+        .catch((error) => {
+          console.error("Error applying for raid:", error);
+          alert("레이드 신청에 실패했습니다.");
+        });
+    },
+    closeApplyModal() {
+      this.selectedRaidInfo = null; // 데이터 초기화
+      this.showApplyModal = false; // 신청 모달 숨기기
+    },
+  },
+  mounted() {
+    this.fetchRaidData();
+  },
+};
+</script>
+
+
   
   
   <style scoped>

@@ -31,34 +31,29 @@ export default {
       error: null,
     };
   },
-  mounted() {
-    // 이미 로그인된 상태라면, 로그인 페이지를 우회하여 /mypage로 이동
-    if (sessionStorage.getItem("token")) {
-      this.$router.push("/mypage");
-    }
-  },
   methods: {
     async login() {
       try {
-        // 로그인 API 호출
         const response = await axios.post('http://localhost:8080/api/auth/login', {
           username: this.username,
-          password: this.password
+          password: this.password,
         });
 
-        // 로그인 성공 시 JWT 토큰과 username을 세션 스토리지에 저장
-        sessionStorage.setItem('token', response.data); // JWT 토큰을 저장
+        sessionStorage.setItem('token', response.data); // JWT 토큰 저장
         sessionStorage.setItem('username', this.username); // username 저장
-        
-        this.$router.push('/mypage'); // 로그인 후 마이페이지로 이동
+
+        // 로그인 상태를 강제로 업데이트
+        window.dispatchEvent(new Event("storage"));
+
+        // Mypage로 이동
+        this.$router.push("/mypage");
       } catch (error) {
-        this.error = "로그인 실패: " + error.response.data.message; // 로그인 실패 시 오류 메시지 표시
-        console.error('Login failed', error);
+        this.error = "로그인 실패: " + error.response.data.message;
+        console.error("Login failed", error);
       }
     },
 
     goToSignup() {
-      // 회원가입 페이지로 이동
       this.$router.push("/signup");
     },
   },

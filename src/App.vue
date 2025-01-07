@@ -1,12 +1,34 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/raid">RaidClearInfo</router-link> |
-    <router-link to="/raidMatch">RaidMatch</router-link> |
-    <router-link to="/mypage">mypage</router-link>
+    <router-link v-if="!isLoggedIn" to="/">Home | </router-link> 
+    <router-link to="/raidMatch"> RaidMatch </router-link> 
+    <router-link v-if="isLoggedIn" to="/raid">| RaidClearInfo </router-link> 
+    <router-link v-if="isLoggedIn" to="/mypage">| MyPage</router-link>
   </nav>
-  <router-view/>
+  <router-view />
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      isLoggedIn: false,
+    };
+  },
+  mounted() {
+    this.updateLoginStatus();
+    window.addEventListener("storage", this.updateLoginStatus);
+  },
+  beforeUnmount() {
+    window.removeEventListener("storage", this.updateLoginStatus);
+  },
+  methods: {
+    updateLoginStatus() {
+      this.isLoggedIn = !!sessionStorage.getItem("username");
+    },
+  },
+};
+</script>
 
 <style>
 #app {
