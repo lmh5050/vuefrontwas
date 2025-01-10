@@ -16,7 +16,7 @@
         <tbody>
           <tr v-for="(value, key) in characterData" :key="key">
             <td>{{ value.ItemMaxLevel || 'N/A' }}</td>
-            <td>{{ value.className || 'N/A' }}</td>
+            <td>{{ value.CharacterClassName || 'N/A' }}</td>
             <td>{{ value.CharacterName || 'N/A' }}</td>
             <td>{{ value.classType || 'N/A' }}</td>
             <td>{{ value.ServerName || 'N/A' }}</td>

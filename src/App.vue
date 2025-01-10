@@ -4,6 +4,7 @@
     <router-link to="/raidMatch"> RaidMatch </router-link> 
     <router-link v-if="isLoggedIn" to="/raid">| RaidClearInfo </router-link> 
     <router-link v-if="isLoggedIn" to="/mypage">| MyPage</router-link>
+    <router-link v-if="isLoggedIn" to="/goldcheck">| CharacterGoldCheck</router-link>
   </nav>
   <router-view />
 </template>

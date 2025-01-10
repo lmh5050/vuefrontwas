@@ -14,7 +14,7 @@
           @click="selectCharacter(character)"
           class="custom-dropdown-item"
         >
-          {{ character.characterName }} - {{ character.itemMaxLevel }} - {{character.className}} - {{character.classType}}
+          {{ character.characterName }} - {{ character.itemMaxLevel }} - {{character.CharacterClassName}} - {{character.classType}}
         </li>
       </ul>
     </div>
@@ -26,7 +26,7 @@
       <p>선택된 캐릭터 정보:</p>
       <p>캐릭터 이름: {{ selectedCharacterInfo.characterName }}</p>
       <p>아이템 최대 레벨: {{ selectedCharacterInfo.itemMaxLevel }}</p>
-      <p>클래스 이름: {{ selectedCharacterInfo.className }}</p>
+      <p>클래스 이름: {{ selectedCharacterInfo.CharacterClassName }}</p>
       <p>클래스 타입: {{ selectedCharacterInfo.classType }}</p>
     </div>
 

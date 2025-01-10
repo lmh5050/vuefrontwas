@@ -4,6 +4,7 @@ import RaidView from '../views/RaidView.vue'
 import RaidMatchView from '../views/RaidMatchView.vue'
 import signupView from '../views/signupView.vue'
 import MypageView from '../views/MypageView.vue'
+import GoldCheckView from '../views/GoldCheckView.vue'
 
 
 const routes = [
@@ -36,6 +37,11 @@ const routes = [
     path: '/mypage',
     name: 'mypage',
     component: MypageView
+  },
+  {
+    path: '/goldcheck',
+    name: 'GoldCheckMainView',
+    component: GoldCheckView
   }
 ]
 

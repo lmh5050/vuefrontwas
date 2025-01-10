@@ -18,7 +18,7 @@
           <select v-model="formData.characterName" required class="character-select">
             <option value="" disabled>캐릭터를 선택하세요</option>
             <option v-for="character in raidApplyCharacterInfo" :key="character.id" :value="character.characterName">
-              {{ character.characterName }} - {{ character.itemMaxLevel }} - {{ character.className }} - {{ character.classType }}
+              {{ character.characterName }} - {{ character.itemMaxLevel }} - {{ character.CharacterClassName }} - {{ character.classType }}
             </option>
           </select>
         </div>

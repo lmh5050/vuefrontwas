@@ -10,7 +10,7 @@
         <div v-for="(raid, index) in raids" :key="index" class="raid-item">
           <p>참여 캐릭터: {{ raid.characterName }}</p>
           <p>아이템 최대 레벨: {{ raid.itemMaxLevel }}</p>
-          <p>클래스 이름: {{ raid.className }}</p>
+          <p>클래스 이름: {{ raid.CharacterClassName }}</p>
           <p>클래스 타입: {{ raid.classType }}</p>
         </div>
       </div>

@@ -15,9 +15,9 @@
               아이템 레벨
               <span :class="{'sort-arrow': true, 'asc': sortKey === 'ItemMaxLevel' && sortAsc, 'desc': sortKey === 'ItemMaxLevel' && !sortAsc}"></span>
             </th>
-            <th @click="sortData('className')" class="table-header-cell">
+            <th @click="sortData('CharacterClassName')" class="table-header-cell">
               직업
-              <span :class="{'sort-arrow': true, 'asc': sortKey === 'className' && sortAsc, 'desc': sortKey === 'className' && !sortAsc}"></span>
+              <span :class="{'sort-arrow': true, 'asc': sortKey === 'CharacterClassName' && sortAsc, 'desc': sortKey === 'CharacterClassName' && !sortAsc}"></span>
             </th>
             <th @click="sortData('CharacterName')" class="table-header-cell">
               캐릭터 명
@@ -40,7 +40,7 @@
         <tbody>
           <tr v-for="(value, key) in sortedCharacterData" :key="key">
             <td>{{ value.ItemMaxLevel || 'N/A' }}</td>
-            <td>{{ value.className || 'N/A' }}</td>
+            <td>{{ value.CharacterClassName || 'N/A' }}</td>
             <td>{{ value.CharacterName || 'N/A' }}</td>
             <td>{{ value.classType || 'N/A' }}</td>
             <td>{{ value.ServerName || 'N/A' }}</td>
@@ -59,11 +59,11 @@ export default {
   name: 'MypageMainView',
   data() {
     return {
-      characterName: '',  // input에서 값을 바인딩할 변수
+      characterName: '', // input에서 값을 바인딩할 변수
       username: sessionStorage.getItem('username') || '', // 세션에서 username 가져오기
-      characterData: null,  // 가져온 데이터를 저장할 변수
-      sortKey: '',          // 현재 정렬된 기준
-      sortAsc: true,        // 오름차순 정렬 여부
+      characterData: null, // 가져온 데이터를 저장할 변수
+      sortKey: '', // 현재 정렬된 기준
+      sortAsc: true, // 오름차순 정렬 여부
     };
   },
   mounted() {
@@ -78,12 +78,12 @@ export default {
         // GET 방식으로 데이터 요청
         const response = await axios.get(`http://localhost:8080/api/lostark/characters/${this.username}`, {
           params: {
-            username: this.username,  // 쿼리 파라미터로 username 전달
+            username: this.username, // 쿼리 파라미터로 username 전달
           },
         });
 
-        console.log('Fetched character data:', response.data);  // 응답 데이터 출력
-        this.characterData = response.data;  // 응답 데이터 저장
+        console.log('Fetched character data:', response.data); // 응답 데이터 출력
+        this.characterData = response.data; // 응답 데이터 저장
       } catch (error) {
         console.error('API 호출 실패:', error);
         // 오류 처리 추가 (예: 오류 메시지 표시)
@@ -95,12 +95,12 @@ export default {
         // POST 방식으로 데이터 전송
         const response = await axios.post('http://localhost:8080/api/lostark/characters', {
           characterName: this.characterName,
-          username: this.username,  // 세션에서 가져온 username 추가
+          username: this.username, // 세션에서 가져온 username 추가
         });
 
-        console.log('Character data:', response.data);  // 응답 데이터 출력
+        console.log('Character data:', response.data); // 응답 데이터 출력
         // POST 요청 후 가져온 데이터가 있다면 화면에 표시
-        this.characterData = response.data;  // 응답 데이터 저장
+        this.characterData = response.data; // 응답 데이터 저장
       } catch (error) {
         console.error('API 호출 실패:', error);
         // 오류 처리 추가 (예: 오류 메시지 표시)
@@ -128,9 +128,9 @@ export default {
 
         // 정렬 순서에 따라 값 비교
         if (this.sortAsc) {
-          return (valueA < valueB ? -1 : (valueA > valueB ? 1 : 0));
+          return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
         } else {
-          return (valueA > valueB ? -1 : (valueA < valueB ? 1 : 0));
+          return valueA > valueB ? -1 : valueA < valueB ? 1 : 0;
         }
       });
     },
@@ -153,7 +153,7 @@ export default {
 
 .input-wrapper {
   position: absolute; /* 절대 위치 */
-  top: 20px;  /* 상단에서 20px 여백 */
+  top: 20px; /* 상단에서 20px 여백 */
   right: 20px; /* 오른쪽에서 20px 여백 */
   width: 20%; /* 전체 화면의 20% 크기 */
   display: flex;
@@ -190,6 +190,8 @@ export default {
   padding: 10px;
   border: 1px solid #ddd;
   background-color: #f5f5f5;
+  max-height: 400px; /* 최대 높이 설정 */
+  overflow-y: auto; /* 세로 스크롤 활성화 */
 }
 
 .character-table {
