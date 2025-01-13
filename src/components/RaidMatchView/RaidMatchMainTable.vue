@@ -13,6 +13,7 @@
             <th>레이드 명</th>
             <th>대표 캐릭터</th>
             <th>메모</th>
+            <th>모집 현황</th>
             <th>레이드 신청</th>
           </tr>
         </thead>
@@ -24,12 +25,23 @@
             <td>{{ getRaidDate(raid.time) }}</td>
             <td>{{ getRaidTime(raid.time) }}</td>
             <td>
-              <a href="#" @click.prevent="openRaidDetailModal(raid)">{{ raid.raidName }}</a>
+              {{ raid.raidName }}
             </td>
             <td>{{ raid.characterName }}</td>
             <td>{{ raid.text }}</td>
             <td>
-              <button class="apply-button" @click="openApplyModal(raid)">신청</button>
+              <a href="#" @click.prevent="openRaidDetailModal(raid)">
+               {{ raid.raidCurrentMember }} / {{ raid.raidMaxMember }}
+              </a>
+            </td>
+            <td>
+              <button 
+                class="apply-button" 
+                :disabled="raid.raidCurrentMember === raid.raidMaxMember" 
+                @click="openApplyModal(raid)"
+              >
+                신청
+              </button>
             </td>
           </tr>
         </tbody>
@@ -162,9 +174,10 @@ export default {
         });
     },
     closeApplyModal() {
-      this.selectedRaidInfo = null; // 데이터 초기화
-      this.showApplyModal = false; // 신청 모달 숨기기
-    },
+  this.selectedRaidInfo = null; // 데이터 초기화
+  this.showApplyModal = false; // 신청 모달 숨기기
+  this.fetchRaidData(); // 데이터를 다시 가져오기
+},
   },
   mounted() {
     this.fetchRaidData();
@@ -222,6 +235,11 @@ export default {
   .apply-button:hover {
     background-color: #3a9b75;
   }
+
+  .apply-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
   
   .register-button {
     padding: 5px 10px;
@@ -261,6 +279,8 @@ export default {
     height: 80vh !important; /* 화면 높이에 비례하는 크기 */
     max-height: 90vh; /* 최대 높이를 90vh로 설정 */
     overflow-y: auto; /* 내용 스크롤 가능 */
+
+
 }
 
   </style>

@@ -17,6 +17,11 @@
             <label for="raidLevel">레이드 레벨</label>
             <input type="text" id="raidLevel" v-model="formData.raidLevel" required />
           </div>
+
+          <div class="form-group">
+            <label for="raidLevel">인원수</label>
+            <input type="text" id="raidmaxmember" v-model="formData.raidmaxmember" required />
+          </div>
   
           <!-- 두 개씩 가로로 배치 -->
           <div class="input-row">
@@ -124,6 +129,7 @@ export default {
         plus2: '',
         plus3: '',
         raidLevel: '',
+        raidmaxmember: ''
       },
     };
   },

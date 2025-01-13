@@ -73,11 +73,14 @@ export default {
         return;
       }
 
+      const username = sessionStorage.getItem('username'); // sessionStorage에서 username 가져오기
+
       // 서버로 신청 데이터 전송
       axios
         .post("http://localhost:8080/api/lostark/characters/raidMatchApply", {
           raidNo: this.raidNo, // 전달받은 raidNo 사용
           characterName: this.selectedCharacterInfo.characterName, // 선택된 캐릭터 이름
+          username: username, // sessionStorage에서 가져온 username
         })
         .then(() => {
           alert("신청이 완료되었습니다."); // 성공 메시지
@@ -87,6 +90,7 @@ export default {
       console.log("Raid 신청됨:", {
         raidNo: this.raidNo,
         characterName: this.selectedCharacterInfo.characterName,
+        username: username, // 로그에 username 포함
       });
     },
   },

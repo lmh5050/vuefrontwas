@@ -5,14 +5,15 @@
       <thead>
         <tr>
           <th>레이드 명</th>
-          <th>1관 클골</th>
-          <th>2관 클골</th>
-          <th>3관 클골</th>
-          <th>클골 합계</th>
+          <th>1관</th>
+          <th>2관</th>
+          <th>3관</th>
+          <th>합계</th>
           <th>재료명</th>
           <th>1관 개수 / (더보기) = 합계</th>
           <th>2관 개수 / (더보기) = 합계</th>
           <th>3관 개수 / (더보기) = 합계</th>
+          <th>인원 수 </th>
           <th>삭제</th>
         </tr>
       </thead>
@@ -40,6 +41,9 @@
           </td>
           <td v-else>
           <!-- 빈 셀 -->
+          </td>
+          <td>
+            {{ RaidInfo.raidmaxmember }}
           </td>
           <td>
             <button @click="deleteRaid(RaidInfo.raidName)">삭제</button>
