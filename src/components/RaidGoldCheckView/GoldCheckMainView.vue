@@ -1,10 +1,5 @@
 <template>
   <div class="page-container">
-    <!-- 오른쪽 위에 위치할 입력박스와 등록 버튼 -->
-    <div class="input-wrapper">
-      <input v-model="characterName" type="text" class="small-input" placeholder="입력해주세요" />
-      <button class="register-button" @click="submitCharacterName">등록</button>
-    </div>
 
     <!-- 가져온 데이터를 아래에 표시 -->
     <div v-if="characterData" class="character-data">
@@ -110,9 +105,22 @@ export default {
 
         // POST 방식으로 데이터 전송
         const response = await axios.post("http://localhost:8080/api/lostark/characters/goldcheck/save", payload);
-
         console.log("Saved character data:", response.data);
       } catch (error) {
+        const payload = this.characterData.map(character => ({
+          characterName: character.characterName,
+          karmen: character.karmen,
+          echidna: character.echidna,
+          behimoth: character.behimoth,
+          karmen4: character.karmen4,
+          egir: character.egir,
+          abrellshould: character.abrellshould,
+          chaos: character.chaos,
+          guardian: character.guardian,
+          epona: character.epona,
+          guildexchange: character.guildexchange,
+        }));
+        console.log(payload);
         console.error("API 호출 실패:", error);
       }
     },
