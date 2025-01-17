@@ -8,9 +8,9 @@
           <tr class="table-header">
             <th class="table-header-cell">캐릭터 정보</th>
             <th class="table-header-cell">카멘1-3</th>
+            <th class="table-header-cell">카맨4</th>
             <th class="table-header-cell">에키드나</th>
             <th class="table-header-cell">베히모스</th>
-            <th class="table-header-cell">카맨4</th>
             <th class="table-header-cell">에기르</th>
             <th class="table-header-cell">아브렐슈드2막</th>
             <th class="table-header-cell">카던</th>
@@ -30,9 +30,9 @@
           >
             <td>{{ value.characterName || 'N/A' }} ({{ value.itemMaxLevel || 'N/A' }})</td>
             <td><input type="checkbox" v-model="value.karmen" :checked="value.karmen" /></td>
+            <td><input type="checkbox" v-model="value.karmen4" :checked="value.karmen4" /></td>
             <td><input type="checkbox" v-model="value.echidna" :checked="value.echidna" /></td>
             <td><input type="checkbox" v-model="value.behimoth" :checked="value.behimoth" /></td>
-            <td><input type="checkbox" v-model="value.karmen4" :checked="value.karmen4" /></td>
             <td><input type="checkbox" v-model="value.egir" :checked="value.egir" /></td>
             <td><input type="checkbox" v-model="value.abrellshould" :checked="value.abrellshould" /></td>
             <td><input type="checkbox" v-model="value.chaos" :checked="value.chaos" /></td>
