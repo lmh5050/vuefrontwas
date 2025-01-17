@@ -5,11 +5,12 @@
       <span style="margin-right: 5px;">시간: <span style="font-weight: bold;">{{ selectedRaidInfo.time }}</span> |</span>
       <span style="margin-right: 5px;">레이드 명: <span style="font-weight: bold;">{{ selectedRaidInfo.raidName }}</span> |</span>
       <span style="margin-right: 5px;">공대장: <span style="font-weight: bold;">{{ selectedRaidInfo.characterName }}</span></span>
+      <span style="margin-right: 5px;">아이디: <span style="font-weight: bold;">{{ selectedRaidInfo.id }}</span></span>
     </div>
     <div class="raid-details">
       <div v-for="(raid, index) in raids" :key="index" class="raid-item">
-        <!-- 참여 여부 표시 (조건부 렌더링 추가) -->
-        <p v-if="isLeader">
+        <!-- 참여 여부 표시 (공대장일 경우만 조건부로 표시) -->
+        <p v-if="isLeader === selectedRaidInfo.id">
           참여 여부: 
           <span 
             style="font-size: 24px; color: green; cursor: pointer;" 
@@ -51,7 +52,7 @@ export default {
     // 공대장인지 확인
     isLeader() {
       const username = sessionStorage.getItem("username"); // 세션스토리지에서 username 가져오기
-      return username === this.selectedRaidInfo.characterName; // username과 공대장이 일치하는지 확인
+      return username;
     },
   },
   methods: {
@@ -64,18 +65,9 @@ export default {
         characterName: characterName,
         status: participation ? 1 : 2, // 1은 참여, 2는 불참
       };
-
-      try {
         // API 호출
-        const response = await axios.post("http://34.47.90.90:8081/api/raid/participation", payload);
+        const response = axios.post("http://localhost:8080/api/lostark/characters/raid/RaidParticipate", payload);
         console.log("응답:", response.data);
-
-        // 성공 메시지 또는 UI 업데이트
-        alert(`참여 상태가 성공적으로 업데이트되었습니다: ${characterName}`);
-      } catch (error) {
-        console.error("API 요청 중 오류 발생:", error);
-        alert("참여 상태 업데이트 중 오류가 발생했습니다.");
-      }
     },
   },
 };
