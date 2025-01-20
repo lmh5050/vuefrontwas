@@ -137,7 +137,11 @@ export default {
       axios
         .get(`http://localhost:8080/api/lostark/characters/raidDetail/${raid.no}`)
         .then((response) => {
-          this.selectedRaids = response.data;
+          // 응답 데이터에 raid.no 값을 추가
+          response.data.raidNo = raid.no;
+          // Vue의 상태 업데이트
+          this.selectedRaids = response.data; 
+          console.log(response.data)
           this.selectedRaidInfo = raid;
           this.showDetailModal = true;
         })

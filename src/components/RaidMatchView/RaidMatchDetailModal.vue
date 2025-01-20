@@ -10,7 +10,7 @@
     <div class="raid-details">
       <div v-for="(raid, index) in raids" :key="index" class="raid-item">
         <!-- 참여 여부 표시 (공대장일 경우만 조건부로 표시) -->
-        <p v-if="isLeader === selectedRaidInfo.id">
+        <p v-if="isLeader === selectedRaidInfo.id && raid.status === '0'">
           참여 여부: 
           <span 
             style="font-size: 24px; color: green; cursor: pointer;" 
@@ -32,7 +32,7 @@
         <p>클래스 타입: {{ raid.classType }}</p>
       </div>
     </div>
-    <button @click="$emit('close')"> 닫기 </button>
+    <button @click="refreshPage"> 닫기 </button>
   </div>
 </template>
 
@@ -59,15 +59,29 @@ export default {
     async toggleParticipation(index, participation) {
       // 참여 캐릭터 데이터
       const characterName = this.raids[index].characterName;
+      const raidNo = this.raids.raidNo;
 
       // 전송할 데이터 생성
       const payload = {
         characterName: characterName,
         status: participation ? 1 : 2, // 1은 참여, 2는 불참
+        raidNo: raidNo,
       };
-        // API 호출
-        const response = axios.post("http://localhost:8080/api/lostark/characters/raid/RaidParticipate", payload);
-        console.log("응답:", response.data);
+
+      // API 호출
+      const response = await axios.post(
+        "http://localhost:8080/api/lostark/characters/raid/RaidParticipate",
+        payload
+      );
+      console.log("응답:", response.data);
+      
+      // 새로고침
+      this.refreshPage();
+    },
+
+    // 페이지 새로고침 메서드
+    refreshPage() {
+      window.location.reload();
     },
   },
 };
