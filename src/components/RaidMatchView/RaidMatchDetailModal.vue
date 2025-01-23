@@ -5,7 +5,6 @@
       <span style="margin-right: 5px;">시간: <span style="font-weight: bold;">{{ selectedRaidInfo.time }}</span> |</span>
       <span style="margin-right: 5px;">레이드 명: <span style="font-weight: bold;">{{ selectedRaidInfo.raidName }}</span> |</span>
       <span style="margin-right: 5px;">공대장: <span style="font-weight: bold;">{{ selectedRaidInfo.characterName }}</span></span>
-      <span style="margin-right: 5px;">아이디: <span style="font-weight: bold;">{{ selectedRaidInfo.id }}</span></span>
     </div>
     <div class="raid-details">
       <div v-for="(raid, index) in raids" :key="index" class="raid-item">
@@ -32,7 +31,9 @@
         <p>클래스 타입: {{ raid.classType }}</p>
       </div>
     </div>
-    <button @click="refreshPage"> 닫기 </button>
+    <button v-if="isLeader === selectedRaidInfo.id"
+    @click="handleRegister" class="register-button"> 완료 </button>
+    <button @click="refreshPage" class="close-button"> 닫기 </button>
   </div>
 </template>
 
@@ -70,13 +71,34 @@ export default {
 
       // API 호출
       const response = await axios.post(
-        "http://localhost:8080/api/lostark/characters/raid/RaidParticipate",
+        "http://localhost:8080/api/lostark/characters/raid/raid-participate",
         payload
       );
       console.log("응답:", response.data);
       
       // 새로고침
       this.refreshPage();
+    },
+
+    async handleRegister() {
+      // 완료 버튼 클릭 시 호출
+      const payload = {
+        raidName: this.selectedRaidInfo.raidName,
+        leaderId: this.selectedRaidInfo.id,
+      };
+
+      try {
+        const response = 
+        await axios.post("http://localhost:8080/api/lostark/raids/raid-end",
+          payload
+        );
+        console.log("등록 성공:", response.data);
+        alert("레이드가 성공적으로 등록되었습니다.");
+        this.refreshPage();
+      } catch (error) {
+        console.error("등록 실패:", error);
+        alert("레이드 등록 중 오류가 발생했습니다.");
+      }
     },
 
     // 페이지 새로고침 메서드
@@ -108,8 +130,6 @@ export default {
 button {
   margin-top: 20px;
   padding: 10px;
-  background-color: #42b983;
-  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -117,6 +137,24 @@ button {
 
 button:hover {
   background-color: #3a9b75;
+}
+
+.register-button {
+  background-color: #007bff; /* 파란색 */
+  color: white;
+}
+
+.register-button:hover {
+  background-color: #0056b3; /* 더 진한 파란색 */
+}
+
+.close-button {
+  background-color: #28a745; /* 초록색 */
+  color: white;
+}
+
+.close-button:hover {
+  background-color: #218838; /* 더 진한 초록색 */
 }
 
 .modal-overlay {

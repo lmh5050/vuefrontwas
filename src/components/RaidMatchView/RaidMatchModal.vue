@@ -90,7 +90,7 @@ export default {
 
       // 캐릭터 정보 가져오기
       axios
-        .get(`http://localhost:8080/api/lostark/characters/applyRaid/${id}`)
+        .get(`http://localhost:8080/api/lostark/characters/apply-raid/${id}`)
         .then((response) => {
           this.raidApplyCharacterInfo = response.data; // 서버에서 반환된 데이터 저장
         })
@@ -121,7 +121,7 @@ export default {
       };
 
       axios
-        .post("http://localhost:8080/api/lostark/characters/raidMatch", formDataWithUsername)
+        .post("http://localhost:8080/api/lostark/characters/raid-match", formDataWithUsername)
         .then((response) => {
           // 성공적으로 등록된 후 처리할 작업
           console.log("등록 성공:", response.data);
