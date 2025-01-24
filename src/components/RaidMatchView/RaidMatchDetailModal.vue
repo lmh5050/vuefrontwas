@@ -81,15 +81,16 @@ export default {
     },
 
     async handleRegister() {
-      // 완료 버튼 클릭 시 호출
+    // 완료 버튼 클릭 시 호출
       const payload = {
-        raidName: this.selectedRaidInfo.raidName,
-        leaderId: this.selectedRaidInfo.id,
+        raids: this.raids, // raids 배열 통째로 포함
+        raidName: this.selectedRaidInfo.raidName, // 공대장 ID
       };
 
       try {
-        const response = 
-        await axios.post("http://localhost:8080/api/lostark/raids/raid-end",
+        console.log("전송 데이터:", payload);
+        const response = await axios.post(
+          "http://localhost:8080/api/lostark/raids/raid-end",
           payload
         );
         console.log("등록 성공:", response.data);
