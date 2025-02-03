@@ -85,15 +85,17 @@ export default {
       const payload = {
         raids: this.raids, // raids 배열 통째로 포함
         raidName: this.selectedRaidInfo.raidName, // 공대장 ID
+        raidNo: this.raids.raidNo
       };
 
       try {
         console.log("전송 데이터:", payload);
         const response = await axios.post(
-          "http://localhost:8080/api/lostark/raids/raid-end",
+          "http://localhost:8080/api/lostark/characters/raid/raid-end",
           payload
         );
         console.log("등록 성공:", response.data);
+        console.log(payload + "페이로드~");
         alert("레이드가 성공적으로 등록되었습니다.");
         this.refreshPage();
       } catch (error) {
