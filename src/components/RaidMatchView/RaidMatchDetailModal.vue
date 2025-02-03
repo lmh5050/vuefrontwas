@@ -71,7 +71,7 @@ export default {
 
       // API 호출
       const response = await axios.post(
-        "http://localhost:8080/api/lostark/characters/raid/raid-participate",
+        "http://34.47.90.90:8081/api/lostark/characters/raid/raid-participate",
         payload
       );
       console.log("응답:", response.data);
@@ -91,7 +91,7 @@ export default {
       try {
         console.log("전송 데이터:", payload);
         const response = await axios.post(
-          "http://localhost:8080/api/lostark/characters/raid/raid-end",
+          "http://34.47.90.90:8081/api/lostark/characters/raid/raid-end",
           payload
         );
         console.log("등록 성공:", response.data);

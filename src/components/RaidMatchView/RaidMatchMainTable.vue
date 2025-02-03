@@ -103,7 +103,7 @@ export default {
   methods: {
     fetchRaidData() {
       axios
-        .get("http://localhost:8080/api/lostark/characters/raid-match")
+        .get("http://34.47.90.90:8081/api/lostark/characters/raid-match")
         .then((response) => {
           this.raidList = response.data;
           this.loading = false;
@@ -135,7 +135,7 @@ export default {
     openRaidDetailModal(raid) {
       this.loading = true;
       axios
-        .get(`http://localhost:8080/api/lostark/characters/raid-detail/${raid.no}`)
+        .get(`http://34.47.90.90:8081/api/lostark/characters/raid-detail/${raid.no}`)
         .then((response) => {
           // 응답 데이터에 raid.no 값을 추가
           response.data.raidNo = raid.no;
@@ -164,7 +164,7 @@ export default {
         return;
       }
       axios
-        .get(`http://localhost:8080/api/lostark/characters/apply-raid/${id}`, {
+        .get(`http://34.47.90.90:8081/api/lostark/characters/apply-raid/${id}`, {
           params: { raidId: raid.no, raidName: raid.raidName },
         })
         .then((response) => {

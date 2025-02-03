@@ -34,7 +34,7 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await axios.post('http://localhost:8080/api/auth/login', {
+        const response = await axios.post('http://34.47.90.90:8081/api/auth/login', {
           username: this.username,
           password: this.password,
         });

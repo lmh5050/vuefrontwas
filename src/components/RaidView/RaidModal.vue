@@ -147,7 +147,7 @@ export default {
 
       // axios를 사용하여 POST 요청 보내기
       axios
-        .post('http://localhost:8080/api/lostark/characters/raid', this.formData)
+        .post('http://34.47.90.90:8081/api/lostark/characters/raid', this.formData)
         .then((response) => {
           // 성공적으로 요청이 완료된 후 처리할 로직
           console.log('Data submitted successfully:', response.data);

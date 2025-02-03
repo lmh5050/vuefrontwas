@@ -51,7 +51,7 @@ export default {
       try {
         // GET 방식으로 데이터 요청
         const response = await axios.get(
-          `http://localhost:8080/api/lostark/characters/${this.username}`,
+          `http://34.47.90.90:8081/api/lostark/characters/${this.username}`,
           {
             params: {
               username: this.username, // 쿼리 파라미터로 username 전달
@@ -71,7 +71,7 @@ export default {
       try {
         // POST 방식으로 데이터 전송
         const response = await axios.post(
-          "http://localhost:8080/api/lostark/characters",
+          "http://34.47.90.90:8081/api/lostark/characters",
           {
             characterName: this.characterName,
             username: this.username, // 세션에서 가져온 username 추가
