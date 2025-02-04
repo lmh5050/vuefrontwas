@@ -1,8 +1,10 @@
 import axios from "axios";
 
-// Axios 인스턴스 생성
+// 환경 변수에서 API URL 가져오기
+const baseURL = process.env.VUE_APP_API_BASE_URL || "http://localhost:8080/api";
+
 const axiosInstance = axios.create({
-  baseURL: "http://34.47.90.90:8081/api", // API의 기본 URL
+  baseURL: baseURL,
   timeout: 5000, // 요청 타임아웃
 });
 

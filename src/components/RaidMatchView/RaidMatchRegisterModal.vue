@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import axios from "axios"; // axios import 추가
+import axiosInstance from '../../axios.js'
 
 export default {
   name: "RaidMatchModal",
@@ -84,8 +84,8 @@ export default {
     },
     // 레이드명 목록을 가져오는 함수
     fetchRaidNames() {
-      axios
-        .get("http://34.47.90.90:8081/api/lostark/characters/raid")
+      axiosInstance
+        .get("/lostark/characters/raid")
         .then((response) => {
           this.raidNames = response.data; // 레이드명 목록을 배열에 담음
         })
@@ -95,8 +95,8 @@ export default {
     },
     // 폼 제출 시 호출되는 함수
     submitForm() {
-      axios
-        .post("http://34.47.90.90:8081/api/lostark/characters/raid-match", this.formData)
+      axiosInstance
+        .post("/lostark/characters/raid-match", this.formData)
         .then((response) => {
           // 성공적으로 등록된 후 처리할 작업
           console.log("등록 성공:", response.data);

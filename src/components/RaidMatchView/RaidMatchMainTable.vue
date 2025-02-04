@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axiosInstance from '../../axios.js'
 import RaidMatchModal from "./RaidMatchModal.vue";
 import RaidMatchDetailModal from "./RaidMatchDetailModal.vue";
 import RaidMatchApplyModal from "./RaidMatchApplyModal.vue";
@@ -102,8 +102,8 @@ export default {
   },
   methods: {
     fetchRaidData() {
-      axios
-        .get("http://34.47.90.90:8081/api/lostark/characters/raid-match")
+      axiosInstance
+        .get("/lostark/characters/raid-match")
         .then((response) => {
           this.raidList = response.data;
           this.loading = false;
@@ -134,8 +134,8 @@ export default {
     },
     openRaidDetailModal(raid) {
       this.loading = true;
-      axios
-        .get(`http://34.47.90.90:8081/api/lostark/characters/raid-detail/${raid.no}`)
+      axiosInstance
+        .get(`/lostark/characters/raid-detail/${raid.no}`)
         .then((response) => {
           // 응답 데이터에 raid.no 값을 추가
           response.data.raidNo = raid.no;
@@ -163,8 +163,8 @@ export default {
         alert("로그인이 필요합니다.");
         return;
       }
-      axios
-        .get(`http://34.47.90.90:8081/api/lostark/characters/apply-raid/${id}`, {
+      axiosInstance
+        .get(`/lostark/characters/apply-raid/${id}`, {
           params: { raidId: raid.no, raidName: raid.raidName },
         })
         .then((response) => {

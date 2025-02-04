@@ -64,7 +64,7 @@
 
 <script>
 import '../../css/components/RaidView/RaidMainChart.css';
-import axios from 'axios';
+import axiosInstance from '../../axios.js'
 import RaidModal from './RaidModal.vue';  // RaidModal.vue 컴포넌트 import
 
 export default {
@@ -80,7 +80,7 @@ export default {
   },
   mounted() {
     // 컴포넌트가 마운트되면 Spring API에서 데이터를 불러옴
-    axios.get('http://34.47.90.90:8081/api/lostark/characters/raid')
+    axiosInstance.get('/lostark/characters/raid')
       .then(response => {
         console.log(response.data);
         this.Raid = response.data;
@@ -95,8 +95,8 @@ export default {
     },
     deleteRaid(raidName) {
       console.log(`${raidName} 레이드를 삭제합니다.`);
-      axios
-          .delete(`http://34.47.90.90:8081/api/lostark/characters/raid/${encodeURIComponent(raidName)}`, {
+      axiosInstance
+          .delete(`/lostark/characters/raid/${encodeURIComponent(raidName)}`, {
               data: {
                   data: raidName  // 본문에 raidName을 data로 포함
               }

@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axiosInstance from '../../axios.js'
 
 export default {
   name: 'MypageMainView',
@@ -76,7 +76,7 @@ export default {
     async fetchCharacterData() {
       try {
         // GET 방식으로 데이터 요청
-        const response = await axios.get(`http://34.47.90.90:8081/api/lostark/characters/${this.username}`, {
+        const response = await axiosInstance.get(`/lostark/characters/${this.username}`, {
           params: {
             username: this.username, // 쿼리 파라미터로 username 전달
           },
@@ -93,7 +93,7 @@ export default {
     async submitCharacterName() {
       try {
         // POST 방식으로 데이터 전송
-        const response = await axios.post('http://34.47.90.90:8081/api/lostark/characters', {
+        const response = await axiosInstance.post('/lostark/characters', {
           characterName: this.characterName,
           username: this.username, // 세션에서 가져온 username 추가
         });

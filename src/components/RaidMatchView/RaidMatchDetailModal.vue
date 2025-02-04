@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import axios from "axios"; // axios 임포트
+import axiosInstance from '../../axios.js'
 
 export default {
   name: "RaidMatchDetailModal",
@@ -70,8 +70,8 @@ export default {
       };
 
       // API 호출
-      const response = await axios.post(
-        "http://34.47.90.90:8081/api/lostark/characters/raid/raid-participate",
+      const response = await axiosInstance.post(
+        "/lostark/characters/raid/raid-participate",
         payload
       );
       console.log("응답:", response.data);
@@ -90,8 +90,8 @@ export default {
 
       try {
         console.log("전송 데이터:", payload);
-        const response = await axios.post(
-          "http://34.47.90.90:8081/api/lostark/characters/raid/raid-end",
+        const response = await axiosInstance.post(
+          "/lostark/characters/raid/raid-end",
           payload
         );
         console.log("등록 성공:", response.data);

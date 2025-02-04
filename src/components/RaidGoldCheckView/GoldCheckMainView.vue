@@ -51,7 +51,7 @@
 
 
 <script>
-import axios from "axios";
+import axiosInstance from '../../axios.js';  // axios.js 파일에서 axiosInstance를 import
 
 export default {
   name: "MypageMainView",
@@ -73,7 +73,7 @@ export default {
   methods: {
     async fetchCharacterData() {
       try {
-        const response = await axios.get(`http://34.47.90.90:8081/api/lostark/characters/gold-check/${this.username}`, {
+        const response = await axiosInstance.get(`/lostark/characters/gold-check/${this.username}`, {
           params: {
             username: this.username,
           },
@@ -104,7 +104,7 @@ export default {
         }));
 
         // POST 방식으로 데이터 전송
-        const response = await axios.post("http://34.47.90.90:8081/api/lostark/characters/gold-check/save", payload);
+        const response = await axiosInstance.post("/lostark/characters/gold-check/save", payload);
         console.log("Saved character data:", response.data);
       } catch (error) {
         const payload = this.characterData.map(character => ({

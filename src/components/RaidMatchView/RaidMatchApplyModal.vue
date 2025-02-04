@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axiosInstance from '../../axios.js'
 
 export default {
   props: {
@@ -76,8 +76,8 @@ export default {
       const username = sessionStorage.getItem('username'); // sessionStorage에서 username 가져오기
 
       // 서버로 신청 데이터 전송
-      axios
-        .post("http://34.47.90.90:8081/api/lostark/characters/raid-match-apply", {
+      axiosInstance
+        .post("/lostark/characters/raid-match-apply", {
           raidNo: this.raidNo, // 전달받은 raidNo 사용
           characterName: this.selectedCharacterInfo.characterName, // 선택된 캐릭터 이름
           username: username, // sessionStorage에서 가져온 username
