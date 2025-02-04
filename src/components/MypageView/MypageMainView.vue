@@ -3,7 +3,7 @@
     <!-- 오른쪽 위에 위치할 입력박스와 등록 버튼 -->
     <div class="input-wrapper">
       <input v-model="characterName" type="text" class="small-input" placeholder="입력해주세요" />
-      <button class="register-button" @click="submitCharacterName">등록</button>
+      <button class="register-button" @click="submitCharacterName" :disabled="isDisabled">등록</button>
     </div>
 
     <!-- 가져온 데이터를 아래에 표시 -->
@@ -64,6 +64,7 @@ export default {
       characterData: null, // 가져온 데이터를 저장할 변수
       sortKey: '', // 현재 정렬된 기준
       sortAsc: true, // 오름차순 정렬 여부
+      isDisabled: false, // 버튼 비활성화 상태
     };
   },
   mounted() {
@@ -91,6 +92,9 @@ export default {
     },
 
     async submitCharacterName() {
+      // 버튼 비활성화 상태로 설정
+      this.isDisabled = true;
+
       try {
         // POST 방식으로 데이터 전송
         const response = await axiosInstance.post('/lostark/characters', {
@@ -101,9 +105,17 @@ export default {
         console.log('Character data:', response.data); // 응답 데이터 출력
         // POST 요청 후 가져온 데이터가 있다면 화면에 표시
         this.characterData = response.data; // 응답 데이터 저장
+
+        // 등록 완료 후 알림 표시
+        alert('등록이 완료되었습니다!');
       } catch (error) {
         console.error('API 호출 실패:', error);
         // 오류 처리 추가 (예: 오류 메시지 표시)
+      } finally {
+        // 30초 후에 버튼 다시 활성화
+        setTimeout(() => {
+          this.isDisabled = false;
+        }, 30000); // 30000ms = 30초
       }
     },
 

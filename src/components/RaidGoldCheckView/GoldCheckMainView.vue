@@ -13,10 +13,11 @@
             <th class="table-header-cell">베히모스</th>
             <th class="table-header-cell">에기르</th>
             <th class="table-header-cell">아브렐슈드2막</th>
+            <th class="table-header-cell">카제3막</th>
             <th class="table-header-cell">카던</th>
             <th class="table-header-cell">가디언토벌</th>
             <th class="table-header-cell">에포나</th>
-            <th class="table-header-cell">길드주화</th>
+            <th class="table-header-cell">길드교환</th>
           </tr>
         </thead>
         <tbody>
@@ -35,6 +36,7 @@
             <td><input type="checkbox" v-model="value.behimoth" :checked="value.behimoth" /></td>
             <td><input type="checkbox" v-model="value.egir" :checked="value.egir" /></td>
             <td><input type="checkbox" v-model="value.abrellshould" :checked="value.abrellshould" /></td>
+            <td><input type="checkbox" v-model="value.mordum" :checked="value.abrellshould" /></td>
             <td><input type="checkbox" v-model="value.chaos" :checked="value.chaos" /></td>
             <td><input type="checkbox" v-model="value.guardian" :checked="value.guardian" /></td>
             <td><input type="checkbox" v-model="value.epona" :checked="value.epona" /></td>

@@ -32,7 +32,7 @@
       </div>
     </div>
     <button v-if="isLeader === selectedRaidInfo.id"
-    @click="handleRegister" class="register-button"> 완료 </button>
+    @click="handleRegister" class="register-button"> 레이드 진행 완료 </button>
     <button @click="refreshPage" class="close-button"> 닫기 </button>
   </div>
 </template>
