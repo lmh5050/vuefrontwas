@@ -121,7 +121,7 @@ export default {
       };
 
       axiosInstance
-        .post("/api/lostark/characters/raid-match", formDataWithUsername)
+        .post("/lostark/characters/raid-match", formDataWithUsername)
         .then((response) => {
           // 성공적으로 등록된 후 처리할 작업
           console.log("등록 성공:", response.data);

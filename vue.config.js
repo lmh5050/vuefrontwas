@@ -10,7 +10,7 @@ module.exports = defineConfig({
         target: process.env.VUE_APP_API_URL || 'http://34.47.90.90:8081:8081' || 'http://34.47.90.90:8081:8080', // Spring Boot 서버 주소
         changeOrigin: true, // CORS 헤더 변경 허용
         pathRewrite: { '^/api': '' }, // '/api' 제거
-        port: 80,
+        port: 3000,
       },
     },
   },
