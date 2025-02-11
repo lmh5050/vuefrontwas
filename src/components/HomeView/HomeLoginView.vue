@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <h2>로그인123456</h2>
+    <h2>로그인1234567</h2>
     <form @submit.prevent="login">
       <div class="input-container">
         <input v-model="username" placeholder="Username" class="small-input" />
