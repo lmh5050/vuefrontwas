@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    # Docker 이미지 빌드
+    - name: Build Docker image
+      run: |
+        docker build -t sebrinu/vue-front-was .
+
+    # Docker 이미지 푸시
+    - name: Push Docker image
+      run: |
+        docker push sebrinu/vue-front-was
