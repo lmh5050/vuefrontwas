@@ -9,13 +9,13 @@
         <input v-model="password" placeholder="Password" type="password" class="small-input" />
       </div>
       <div class="input-container">
-        <button type="submit" class="small-button">로그인버튼</button>
+        <button type="submit" class="small-button">로그인</button>
       </div>
     </form>
     <p v-if="error">{{ error }}</p>
     
     <div class="signup-container">
-      <button @click="goToSignup" class="small-button signup-button">회원가입버튼</button>
+      <button @click="goToSignup" class="small-button signup-button">회원가입</button>
     </div>
   </div>
 </template>
